@@ -1,0 +1,243 @@
+{% extends "base.html" %} 
+{% block content %}
+{{result}} <br> {{data}}
+<br>
+{{requirement}}
+<form method="post">
+    {% csrf_token %}
+                         <div class="row">
+                        
+                          <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Earnings (Monthly)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Earnings (Annual) Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Earnings (Annual)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                         <div class="row">
+                            <!-- Default Card Example -->
+                            <div class="card col-lg-6">
+                                <div class="card-header">
+                                    Default Card Example
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive responsive-table">
+                                        <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ingridient</th>
+                                                    <th>Min%</th>
+                                                    <th>Max%</th>
+                                                    <th>Use%</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Auto Sum %</th>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th></th>
+                                                   
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                
+                                                {% for i, id in ingridient.items %}
+                                               
+                                            
+                                                <tr>
+                                                    <td>{{i}}</td>
+                                                    <td><input type="number" class="form-control" name="min_{{id}}" id='min'></td>
+                                                    <td><input type="number" class="form-control " name="max_{{id}}" id='max'></td>
+                                                    <td></td>
+                                                    
+                                                </tr>
+                                              
+                                                {% endfor %}
+
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card col-lg-6">
+                                <div class="card-header">
+                                    Default Card Example
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive responsive-table">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nutrient</th>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                    <th>Analysis</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Nutrient</th>
+                                                    <th>Min</th>
+                                                    <th>Max</th>
+                                                    <th>Analysis</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                    <tr>
+                                                           
+                                                {% for i in nutrients %}
+                                                {% if i != 'cost' %}
+                                                
+               
+                                                <tr>
+                                                    <td>{{i}}</td>
+                                                    <td><input type="number" class="form-control" name="min_{{i}}"></td>
+                                                    <td><input type="number" class="form-control" name="max_{{i}}"></td>
+                                                    <td></td>
+                                                   
+                                                </tr>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                             
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                           
+                        </div>
+
+                        <div class="m-4"><h1>Final Analysis</h1><div>
+                        <div class="row">
+                            <!-- Default Card Example -->
+                            <div class="card col-lg-6">
+                               
+                                <div class="card-body">
+                                    <div class="table-responsive responsive-table">
+                                        <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ingredient</th>
+                                                    <th>Use%</th>
+                                                    <th>status</th>
+                                                    <th>cost</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                
+                                            </tfoot>
+                                            <tbody>
+                                                <tr>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                     <td> {{status}} </td>
+                                                     <td> {{cost}} </td>
+                                                     </tr>
+                                               
+
+                                                {% for ingridient, value in selected_ingridients.items %}
+                                                <tr>
+                                                <td>{{ingridient}}</td>
+                                              <td>{{value}}</td>
+                                              <td> </td>
+                                              <td> </td>
+                                            </tr>
+                                            {% endfor %}
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card col-lg-6">
+                               
+                                <div class="card-body">
+                                    <div class="table-responsive responsive-table">
+                                        <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Satisfied Nutrient</th>
+                                                    <th>Unsatisfied Nutrient</th>
+                                                    <th>Ammount</th>
+                                                    <th>Max</th>
+                                                    <th>Min</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                
+                                            </tfoot>
+                                            <tbody>
+                                            {{total_nutrient}}
+                                            {{not_satisfied}}
+
+                                                {% for nutrient, value in total_nutrient.items %}
+                                                <tr>
+                                                    <td>{{nutrient}}</td>
+                                                    <td></td>
+                                                    <td>{{value}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                {% for nutrient, value in not_satisfied.items %}
+                                                <tr>
+                                                    <td></td>
+                                                    <td>{{nutrient}}</td>
+                                                    <td>{{value}}</td>
+                                                  
+                                                </tr>
+                                                {% endfor %}
+                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            {{nutrient_requirements}}
+                        
+                           
+                        </div>
+
+                        <button type="submit" id="submit" class="btn btn-success p-1 m-1 w-75 btn-icon-split" >
+                            <span class="text">Submit</span>
+                        </button>
+                    </form>
+
+  {% endblock  %}

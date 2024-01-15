@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post" >
+   
+
+ <div class="row">
+    <div class="card col-lg-6">
+        <div class="card-body">
+            <div class="table-responsive h-100">
+                <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>In Stock</th>
+                            <th>Ingridient</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+
+
+                           
+                        </tr>
+                    </thead>  
+
+                    <tbody class='ingridient_row'>
+                         {% csrf_token %}
+                        
+                        {% for feed_data in feeds_data %}
+                        {% for ingredient_data in feed_data.ingredients_data %}
+                       
+                       
+                            <tr class="ingredient-row" data-ingredient-id="{{ ingredient_data.ingredient_id }}">
+                                <td>   <input id="myCheckbox_{{feed_data.id}}" type="checkbox" name="checkbox" onclick="checkboxChanged({{feed_data.id}})" class="ingredient-checkbox">
+                                   
+                                </td> 
+                                <td>   {{ ingredient_data.ingredient }} </td>
+                            <td> <a class="btn btn-sm btn-success p-1 m-1 w-75 btn-icon-split" onclick="display('n_{{feed_data.id}}')"><span class="text">Nutrients</span></a></td>
+                            <td> <a href=" {% url 'edit' feed_data.id %}"class="btn btn-sm btn-success p-1 m-1 w-75 btn-icon-split">
+                                <span class="text">edit</span>
+                            </a></td>
+                            <td> <a href="{% url 'delete' feed_data.id %}" class="btn btn-sm btn-success p-1 m-1 w-75 btn-icon-split">
+                                <span class="text">delete</span>
+                            </a></td>
+                            </tr>
+                           
+                         <input type="hidden" id="feedCountInput" name="feed_count" value="0">
+
+                        {% endfor %}
+                    {% endfor %}
+             
+                    <button type="submit" id="submit" class="btn btn-success p-1 m-1 w-75 btn-icon-split" >
+                        <span class="text">Submit</span>
+                    </button>
+                     
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% for feed_data in feeds_data %}
+    <div class="card col-lg-6" id="n_{{ feed_data.id }}" style="display:none;">
+        <div class="card-body">
+            <div class="table-responsive ">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nutrient</th>
+                            <th>Ammount per Unit</th>
+                            
+                            
+                            {% for ingredient_data in feed_data.ingredients_data %}
+                                
+                                
+                                    {% for nutrient, value in ingredient_data.nutrients %}
+                                        <tr><td>{{ nutrient }}</td><td>{{ value }}</td><tr/>
+                                    {% endfor %}
+                             
+                            {% endfor %}
+                 
+                        </tr>
+                    </thead>
+                   
+                    <tbody >
+                
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+</form>
+
+
+  
+<script>
+    function display(id){
+  
+        
+            // Hide all tables
+            var tables = document.querySelectorAll('.card[id^="n_"]');
+            tables.forEach(function(table) {
+                table.style.display = 'none';
+            });
+    
+            // Show the specified table
+            var selectedTable = document.getElementById(id);
+            if (selectedTable) {
+                selectedTable.style.display = 'block';
+            }
+        
+
+    }
+    
+       // Call display function for the first card onload
+       window.onload = function () {
+        var firstFeedDataId = '{{ feeds_data.0.id }}';
+        display('n_' + firstFeedDataId);
+    };
+
+</script>
+
+
+
+{% endblock  %}

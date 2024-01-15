@@ -1,0 +1,89 @@
+{% extends "base.html" %} 
+{% block content %}
+<form method='post'>
+    {% csrf_token %}
+    <div class="row">
+        <!-- Default Card Example -->
+        <div class="card col-lg-6">
+            <div class="card-body">
+                <div class="table-responsive h-100">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Ingredient</th>
+                            </tr>
+                        </thead>  
+                        <tbody class='ingridient_row'>
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control" placeholder="Ingredient" value="{% if deleted_feed_data %}{% for ingredient_data, values in deleted_feed_data.ingridient_batch.items %} {{ ingredient_data }} {% endfor %}{% endif %}" name="ingridient" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for='cost'>cost</label></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="number"  step="any" class="form-control" placeholder="cost per unit" name="cost" required>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card col-lg-6">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Nutrient</th>
+                                <th>Amount per Unit</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <th>
+                                <a onclick="ad_nutrient()" class="btn btn-success p-1 m-1 w-75 btn-icon-split">
+                                    <span class="text">Add row</span>
+                                </a>
+                            </th>
+                            <th>
+                                <a onclick="deleteLastRow()" class="btn btn-success p-1 m-1 w-75 btn-icon-split">
+                                    <span class="text">Delete row</span>
+                                </a>
+                            </th>
+                        </tfoot>
+                        <tbody class='nutrient_row'>
+                            {% if deleted_feed_data %}
+                                {% for ingredient_data, values in deleted_feed_data.ingridient_batch.items %}
+                                    {% for key, value in values.items %}
+                                        {% if key != 'cost' %}
+                                            {% with my_variable=forloop.counter0 %}
+                                                <script>increment()</script>
+                                                <tr>
+                                                    <td><input type="text" value="{{ key }}" class="form-control" required="" name="n_{{ my_variable }}"></td>
+                                                    <td><input type="text" value="{{ value }}" class="form-control" required="" name="a_{{ my_variable }}"></td>
+                                                </tr>
+                                            {% endwith %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="nameCountInput" name="name_count" value="0">
+    <button type="submit" id="submit" class="btn btn-success p-1 m-1 w-75 btn-icon-split" disabled>
+        <span class="text">Submit</span>
+    </button>
+   {% if deleted_feed_data %}
+   <script>activate()</script>
+   {% endif %}
+</form>
+
+
+{% endblock %}
