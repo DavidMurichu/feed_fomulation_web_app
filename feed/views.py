@@ -4,6 +4,7 @@ from pulp import *
 from .models import Feed
 from .optimizer import feed_fomulate
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
 # Create your views here.
 selected_id=[]
 nutrients_required=set()
@@ -14,7 +15,11 @@ def check(input):
     if input=='' or input== None:
         return None
     else:
-        return int(input)
+        return float(input)
+    
+
+    
+    
 def feed(request):
     context = shared_context
     if request.method == 'POST':
@@ -22,11 +27,15 @@ def feed(request):
             min_value = check(request.POST.get(f'min_{nutrient}', None))
             max_value = check(request.POST.get(f'max_{nutrient}', None))
             nutrient_requirement[nutrient] = {'min':min_value, 'max':max_value}
-
+        
+        ingridients={}
         for feed_id in selected_id:
             min_value = request.POST.get(f'min_{feed_id}')
             max_value = request.POST.get(f'max_{feed_id}')
             obj = get_object_or_404(Feed, id=int(feed_id))
+            
+            for ingridient, nutrients in obj.ingridient_batch.items():
+                ingridients[ingridient]={'id':feed_id, 'min_value':min_value, 'max_value':max_value}
             
             for ingridient, nutrients in obj.ingridient_batch.items():
                 # Create a new dictionary for each ingredient
@@ -36,24 +45,28 @@ def feed(request):
             
         result=feed_fomulate(nutrient_requirements=nutrient_requirement, ingredients_x=fomulation_data)
         context.update(result)
+        
         context['data'] = fomulation_data
         context['nutrients'] = nutrient_requirement
-        return render(request, 'home.html', context)
+        context['ingridient']=ingridients
+
+        return render(request, 'analysis.html', context)
     return render(request, 'home.html', context)
 
 
 def ingridient_exist(check_ingridient):
     feed_instances = Feed.objects.all()
     for feed_instance in feed_instances:
-        print(feed_instance.ingridient_batch.items())
         for ingredient, nutrients in feed_instance.ingridient_batch.items():
-            print(ingredient)
+        
             if ingredient == check_ingridient:
                 return True          
     return False
 
 
 def add_ingridient(request):
+    global shared_context
+    shared_context={}
     context={}
     deleted_feed_data = request.session.pop('deleted_feed', None)
     if deleted_feed_data:
@@ -62,25 +75,31 @@ def add_ingridient(request):
         request.session.flush()
     if request.method == 'POST':
         ingridient = request.POST.get('ingridient')
-        ingridient=ingridient.strip()
+        ingridient= ingridient.strip().lower()
         cost = request.POST.get('cost')
         if ingridient_exist(ingridient):
+            messages.error(request, 'Ingridient Exists')
+
             return render(request, 'add_ingridients.html', context)
         else:
-            count = int(request.POST.get('name_count', ''))
             ingridient_batch={}
             nutrients = {}
+            count = int(request.POST.get('name_count', ''))
             for i in range(count):
                 nutrient_name = request.POST.get(f'n_{i}')
                 nutrient_amount = float(request.POST.get(f'a_{i}'))
                 nutrients[nutrient_name] = nutrient_amount
+            # nutrient_list=request.POST.getlist('Nutrient')
+            # value_list=request.POST.getlist('Value')
+            # for i in range(len(nutrient_list)):
+            #     nutrients[nutrient_list[i]]=int(value_list[i])
             nutrients['cost'] = int(cost)
 
             ingridient_batch[ingridient]=nutrients
             # Create a Feed instance and save it to the database
             feed_instance = Feed(ingridient_batch=ingridient_batch)
             feed_instance.save()
-
+            messages.success(request, f'{ingridient} added')
             # Redirect or render a response as appropriate
             return redirect('feed_store')  # Replace 'feed_store' with the appropriate URL
 
@@ -88,6 +107,8 @@ def add_ingridient(request):
 
 
 def feed_store(request):
+    global shared_context
+    shared_context={}
     context={}
     if request.method=='POST':
         selected=request.POST.getlist('feed')
@@ -100,7 +121,9 @@ def feed_store(request):
             selected_id.append(id)
             obj = get_object_or_404(Feed, id=int(id))
             for ingridient, nutrients in obj.ingridient_batch.items():
-                ingridients[ingridient]=id
+                ingridients[ingridient]={'id':id, 'min_value':'', 'max_value':''}
+                
+
                 for nutrient, value in nutrients.items():
                     if nutrient != 'cost':
                         if is_unique(nutrient, nutrients_required):
@@ -130,15 +153,15 @@ def feed_store(request):
         context = {'feeds_data': feeds_data}
     return render(request, 'feed.html', context )
 
-def edit(request, id):
-    object = get_object_or_404(Feed, id=id)
-    request.session['deleted_feed'] = {
-        'ingridient_batch': object.ingridient_batch,
+# def edit(request, id):
+#     object = get_object_or_404(Feed, id=id)
+#     request.session['deleted_feed'] = {
+#         'ingridient_batch': object.ingridient_batch,
         
-    }
+#     }
    
-    object.delete()
-    return redirect('add_ingridient')
+    # object.delete()
+    # return redirect('add_ingridient')
 
 
 

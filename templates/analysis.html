@@ -1,2 +1,198 @@
-{{data}}
-{{requirement}}
+{% extends 'base.html' %}
+{% block content %}
+<div class="m-4"><h1>Final Analysis</h1><div>
+    <div class="row">
+        <!-- Feed Fomulation -->
+        <div class="card col-lg-6">
+            
+            <div class="card-body">
+                <div class="table-responsive responsive-table">
+                    <table class="table table-bordered " id="dataTable" height="auto" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>  {% if status == 1 %} Optimal {% else %}Infeasible{% endif %}
+                                        </th>
+                            </tr>
+                            <tr>
+                                <th>cost</th>
+                                <th>{{cost}}</th>
+                            </tr>
+                            <tr>
+                                <th>Ingredient</th>
+    
+                                <th>use per unit</th>
+                                <th>Min%</th>
+                                <th>Max%</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            
+                        </tfoot>
+                        <tbody>
+                            
+                            
+    
+                            {% for ingridient, value in selected_ingridients.items %}
+                            {% for i,v in data.items%}
+                            {% if i == ingridient %}
+                            <tr>
+                            <td>{{ingridient}}</td>
+                            <td>{{value}}</td>
+                            <td> {{v.min}}</td>
+                            <td>{{v.max}} </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                            </tr>
+    
+    
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    
+        <div class="card col-lg-6">
+            
+            <div class="card-body">
+                <div class="table-responsive responsive-table">
+                    <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Satisfied Nutrient</th>
+                                <th>Unsatisfied Nutrient</th>
+                                <th>Ammount</th>
+                                <th>Min</th>
+                                <th>Max</th>
+    
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            
+                        </tfoot>
+                        <tbody>
+                        
+    
+                        
+    
+                            {% for nutrient, value in total_nutrient.items %}
+                            {% for n, v in nutrient_requirements.items  %}
+                            {% if n == nutrient %}
+                            
+                            
+                            <tr>
+                                <td>{{nutrient}}</td>
+                                <td></td>
+                                <td  >{{value}}</td>
+                                <td>{{v.min}}</td>
+    
+                                <td>{{v.max}}</td>
+    
+                                
+    
+                            </tr>
+                            
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            {% for nutrient, value in not_satisfied.items %}
+                            {% for n, v in nutrient_requirements.items  %}
+                            {% if n == nutrient %}
+                            
+                            
+                            <tr>
+                                <td></td>
+    
+                                <td>{{nutrient}}</td>
+                                <td  >{{value}}</td>
+                                <td>{{v.min}}</td>
+    
+                                <td>{{v.max}}</td>
+                            
+                            </tr>
+                            
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        
+    
+            <!-- Earnings (Annual) Card Example -->
+            <div class="col-md-6">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Recommedation</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"> <ol>
+                                {% if not_satisfied %}
+                                {% for nutrient, value in not_satisfied.items %}
+                                
+                                <li>Add a {{nutrient}} booster</li>
+                                {% endfor %}
+                                {% else %}
+                                No Recommedation Status {% if status == 1 %} Optimal {% else %}Infeasible{% endif %}
+                                {% endif %}
+                                </ol></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="card col-lg-12">
+            
+        <div class="card-body">
+            <div class="table-responsive responsive-table">
+                <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nutrient
+                            </th>
+                            <th>Ammount</th>
+                            <th>Min</th>
+                            <th>Max</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                        {% for nutrient, value in  final_data.items %}
+                     
+                        
+                            {% if nutrient != 'min' and nutrient != 'max' %}
+                            
+                            
+                            <tr>
+                                <td>{{nutrient}}</td>
+                                <td  >{{value}}</td>
+                                {% for n, v in nutrient_requirements.items  %}
+                                {% if  n == nutrient %}
+                                <td>{{v.min}}</td>
+                                <td>{{v.max}}</td>
+                                {% endif %}
+                                {% endfor %}
+    
+                            </tr>
+                            
+                            {% endif %}
+                            
+                       
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  
+{% endblock %}

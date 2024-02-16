@@ -84,6 +84,29 @@
    <script>activate()</script>
    {% endif %}
 </form>
-
+<script>function ad_nutrient() {
+    var table = document.getElementsByClassName('nutrient_row');
+    var firstTable = table[0];
+    var newRow = document.createElement('tr');
+    var newCell = document.createElement('td');
+    var newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.className = 'form-control';
+    newInput.required = true;
+    newInput.name = 'n_' + String(name_count);
+    newCell.appendChild(newInput);
+    var newCell1 = document.createElement('td');
+    var newInput1 = document.createElement('input');
+    newInput1.type = 'number';
+    newInput1.step= 'any';
+    newInput1.className = 'form-control';
+    newInput1.required = true;
+    newInput1.name = 'a_' + String(name_count);
+    newCell1.appendChild(newInput1);
+    newRow.appendChild(newCell);
+    newRow.appendChild(newCell1);
+    firstTable.appendChild(newRow);
+    increment();
+}</script>
 
 {% endblock %}

@@ -8,30 +8,30 @@
         document.getElementById('nameCountInput').value = name_count;
     }
 
-    function ad_nutrient() {
-        var table = document.getElementsByClassName('nutrient_row');
-        var firstTable = table[0];
-        var newRow = document.createElement('tr');
-        var newCell = document.createElement('td');
-        var newInput = document.createElement('input');
-        newInput.type = 'text';
-        newInput.className = 'form-control';
-        newInput.required = true;
-        newInput.name = 'n_' + String(name_count);
-        newCell.appendChild(newInput);
-        var newCell1 = document.createElement('td');
-        var newInput1 = document.createElement('input');
-        newInput1.type = 'number';
-        newInput1.step= 'any';
-        newInput1.className = 'form-control';
-        newInput1.required = true;
-        newInput1.name = 'a_' + String(name_count);
-        newCell1.appendChild(newInput1);
-        newRow.appendChild(newCell);
-        newRow.appendChild(newCell1);
-        firstTable.appendChild(newRow);
-        increment();
-    }
+    // function ad_nutrient() {
+    //     var table = document.getElementsByClassName('nutrient_row');
+    //     var firstTable = table[0];
+    //     var newRow = document.createElement('tr');
+    //     var newCell = document.createElement('td');
+    //     var newInput = document.createElement('input');
+    //     newInput.type = 'text';
+    //     newInput.className = 'form-control';
+    //     newInput.required = true;
+    //     newInput.name = 'n_' + String(name_count);
+    //     newCell.appendChild(newInput);
+    //     var newCell1 = document.createElement('td');
+    //     var newInput1 = document.createElement('input');
+    //     newInput1.type = 'number';
+    //     newInput1.step= 'any';
+    //     newInput1.className = 'form-control';
+    //     newInput1.required = true;
+    //     newInput1.name = 'a_' + String(name_count);
+    //     newCell1.appendChild(newInput1);
+    //     newRow.appendChild(newCell);
+    //     newRow.appendChild(newCell1);
+    //     firstTable.appendChild(newRow);
+    //     increment();
+    // }
 
     function deleteLastRow() {
         var table = document.getElementsByClassName('nutrient_row');
@@ -52,27 +52,12 @@
             element.removeAttribute('disabled');
         }
     }
-    // function checked(id) {
-    //     var hiddenInput = document.createElement('input');
-    //     hiddenInput.type = 'hidden';
-    //     hiddenInput.className = 'form-control';
-    //     hiddenInput.required = true;
-    //     hiddenInput.value = id;
-    //     hiddenInput.id = 'i_' + String(feed_count);
-    //     hiddenInput.name = 'i_' + String(feed_count);
-    
-    //     var form = document.querySelector('form'); // Assuming there's only one form on the page
-    //     form.appendChild(hiddenInput);
-    
-    //     feed_count++;
-    //     document.getElementById('feedCountInput').value = feed_count;
 
-    // }
     function checked(id) {
         var table = document.getElementsByClassName('ingridient_row');
         var firstTable = table[0];
         var newInput = document.createElement('input');
-        newInput.type = 'text';
+        newInput.type = 'hidden';
         newInput.value=id;
         newInput.id=id;
         newInput.className = 'form-control';

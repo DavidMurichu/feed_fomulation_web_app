@@ -1,9 +1,11 @@
+{% include 'messages.html' %}
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-
+<script src="/static/js/script.js" ></script>
 <head>
-    <script src="/static/scriptt.js"></script>
+
 
     <style>
 
@@ -12,7 +14,7 @@
             border-radius: 0;
         }
         .responsive-table {
-            max-height: 300px; /* Set your desired maximum height */
+            max-height: auto; /* Set your desired maximum height */
             overflow-y: auto;
           }
          tfoot {
@@ -62,13 +64,16 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">Fomulate <sup>2</sup></div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
 
+            <li><a href="{% url 'home' %}" class="btn btn-success p-1 m-1 w-75 btn-icon-split">
+                <span class="text">Fomulate</span>
+            </a></li>
             <li><a href="{% url 'add_ingridient' %}" class="btn btn-success p-1 m-1 w-75 btn-icon-split">
                 <span class="text">Add Ingridient</span>
             </a></li>
@@ -134,25 +139,6 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-   
-    <!-- Bootstrap core JavaScript-->
-
-    <script src="/static/vendor/jquery/jquery.min.js"></script>
-    <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    
-    <script src="/static/vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="/static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 
